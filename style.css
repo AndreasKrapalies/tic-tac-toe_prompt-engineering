@@ -1,0 +1,42 @@
+body{
+    background-color: #323232;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    color: rgb(255,255,255);
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+  }
+  
+  td {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 24px;
+    font-weight: bold;
+    border: 1px solid rgb(255,255,255);
+  }
+  
+  tr:first-child td {
+    border-top: none;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  td:first-child {
+    border-left: none;
+  }
+  
+  td:last-child {
+    border-right: none;
+  }
