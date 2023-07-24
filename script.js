@@ -38,9 +38,18 @@ function onCellClick(cell) {
   const symbolSVG = currentSymbol === "circle" ? generateCircleSVG() : generateCrossSVG();
   cell.innerHTML = symbolSVG;
 
-  // Wechsle zum anderen Symbol für den nächsten Klick
-  currentSymbol = currentSymbol === "circle" ? "cross" : "circle";
+  // Überprüfe, ob es einen Gewinner gibt
+  const winner = checkWinner();
+  console.log(winner);
+  if (winner) {
+    alert(`Spieler ${winner === "circle" ? "Kreis" : "Kreuz"} hat gewonnen!`);
+    resetGame();
+  } else {
+    // Wechsle zum anderen Symbol für den nächsten Klick
+    currentSymbol = currentSymbol === "circle" ? "cross" : "circle";
+  }
 }
+
 
 function generateCircleSVG() {
   const color = '#00B0EF';
@@ -69,4 +78,47 @@ function generateCrossSVG() {
               <animate attributeName="y2" from="60" to="10" dur="0.75s" fill="freeze" />
             </line>
           </svg>`;
+}
+
+  function checkWinner() {
+    const cells = document.querySelectorAll("td");
+    const symbols = Array.from(cells).map((cell) => cell.innerHTML); // Array mit den SVG-Elementen als HTML-Strings
+  
+    // Gewinnkombinationen (Zeilen, Spalten, Diagonalen)
+  // Gewinnkombinationen (Zeilen, Spalten, Diagonalen)
+  const winCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontale Linien
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertikale Linien
+    [0, 4, 8], [2, 4, 6] // Diagonale Linien
+  ];
+  
+    for (const combination of winCombinations) {
+      const [a, b, c] = combination;
+      if (symbols[a] && symbols[b] && symbols[c]) {
+        const symbolA = getInnerTagName(symbols[a]);
+        const symbolB = getInnerTagName(symbols[b]);
+        const symbolC = getInnerTagName(symbols[c]);
+        if (symbolA === symbolB && symbolB === symbolC) {
+          return symbolA;
+        }
+      }
+    }
+  
+    return null; // Es gibt keinen Gewinner
+  }
+  
+  // Hilfsfunktion, um den unteren Tag-Namen innerhalb des SVG-Elements zu erhalten
+  function getInnerTagName(svgHTML) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgHTML, "image/svg+xml");
+    const innerElement = doc.documentElement.firstElementChild;
+    return innerElement.tagName;
+  }
+
+function resetGame() {
+  const cells = document.querySelectorAll("td");
+  cells.forEach((cell) => {
+    cell.innerHTML = ""; // Leere alle Zellen im Spielfeld
+  });
+  currentSymbol = "circle"; // Setze das Startsymbol zurück
 }
